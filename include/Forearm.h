@@ -1,0 +1,21 @@
+#ifndef FOREARM_INC
+#define FOREARM_INC
+
+#include <stdint.h>
+#include <GL/gl.h>           
+#include <GL/glu.h>         
+#include <GL/glut.h>    
+#include "Element.h"
+#include <stdio.h>
+
+typedef struct Forearm
+{
+	Element base;
+	Position pos;
+	int list;
+}Forearm;
+
+Forearm* Forearm_create(GLUquadricObj* qobj, Position pos);
+void Forearm_onUpdate(Element* self);
+
+#endif

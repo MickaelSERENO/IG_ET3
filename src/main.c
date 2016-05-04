@@ -1,13 +1,13 @@
 #include <GL/gl.h>           
 #include <GL/glu.h>         
 #include <GL/glut.h>    
+#include "Body.h"
 
 #include <stdio.h>      
 #include <stdlib.h>     
 #include <math.h>
 
 #define KEY_ESC 27
-#define PI 3.1415926535898
 #define position_Ini 60.0
 #define windowWidth 300
 #define windowHeight 300
@@ -19,6 +19,8 @@
 
 #define true  1
 #define false 0
+
+Body* body=NULL;
 
 //On initialise le Material
 static GLfloat mat_specular[]          = { 1.0 , 1.0 , 1.0 , 1.0 };
@@ -50,6 +52,7 @@ int latence             = 4;
 void init_scene();
 void render_scene();
 GLvoid initGL();
+GLvoid initScene();
 GLvoid window_display();
 GLvoid window_reshape(GLsizei width, GLsizei height); 
 GLvoid window_key(unsigned char key, int x, int y); 
@@ -70,7 +73,8 @@ int main(int argc, char **argv)
 	// initialisation de OpenGL et de la scène
 	initGL();  
 	//init_scene();
-
+	initScene();
+	
 	// choix des procédures de callback pour 
 	// le tracé graphique
 	glutDisplayFunc(&window_display);
@@ -119,6 +123,21 @@ GLvoid initGL()
 	glClearColor(RED, GREEN, BLUE, ALPHA);        
 	// z-buffer
 	glEnable(GL_DEPTH_TEST);
+	
+	
+}
+
+GLvoid initScene()
+{
+	GLUquadricObj* GLAPIENTRY qobj;
+	// allocation d´une description de quadrique
+	qobj = gluNewQuadric();
+	// la quadrique est pleine 
+	gluQuadricDrawStyle(qobj, GLU_FILL); 
+	// les ombrages, s´il y en a, sont doux
+	gluQuadricNormals(qobj, GLU_SMOOTH);
+	
+	body = Body_create(qobj);
 }
 
 GLvoid window_display()
@@ -194,6 +213,18 @@ GLvoid window_timer()
 
 void render_scene()
 {
+	glLoadIdentity();
+	// rotation de 90 degres autour de Ox pour mettre l'axe Oz 
+	// vertical comme sur la figure
+	glRotatef(-90, 1, 0, 0);
+
+	// rotation de 160 degres autour de l'axe Oz pour faire
+	// avancer l'avatar vers le spectateur
+	glRotatef(-160, 0, 0, 1);
+	
+	glRotatef(delta, 0, 0, 1);
+	if(body != NULL)
+		Element_update((Element*)body);
 	//permutation des buffers lorsque le tracé est achevé
 	glutSwapBuffers();
 }

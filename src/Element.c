@@ -17,14 +17,14 @@ void Element_update(Element* this)
 	glPushMatrix();
 	{
 		//On dessiner le contenu de l'objet à l'écran
-		if(this->onUpdate)
+		if(this->onUpdate != NULL)
 			this->onUpdate(this);
 
 		//On appel la fonction update de tout les enfants
-		//Cet fonction servira à leur tour de se mettre à jour et de dessiner leur contenue tout en gardant la matrice parente active (glPushMatrix)
+		//Cette fonction servira à leur tour de se mettre à jour et de dessiner leur contenue tout en gardant la matrice parente active (glPushMatrix)
 		uint32_t i;
 		for(i=0; i < this->nbChild; i++)
-			if(this->child[i]->update)
+			if(this->child[i]->update != NULL)
 				this->child[i]->update(this->child[i]);
 	}
 	glPopMatrix();

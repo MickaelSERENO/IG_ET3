@@ -1,10 +1,18 @@
 #ifndef  ELEMENT_INC
 #define  ELEMENT_INC
 
+#define PI 3.1415926535898
+
 #include <stdint.h>
 #include <GL/gl.h>           
 #include <GL/glu.h>         
 #include <GL/glut.h>    
+
+typedef enum Position
+{
+	RIGHT,
+	LEFT
+}Position;
 
 typedef struct Element
 {
