@@ -16,6 +16,8 @@ typedef struct Breast
 	Shoulder* leftShoulder;
 	Shoulder* rightShoulder;
 	Neck* neck;
+	float defAngleWalk;
+	float endAngleWalk;
 	int list;
 }Breast;
 

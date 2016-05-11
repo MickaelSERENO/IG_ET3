@@ -192,6 +192,12 @@ GLvoid window_key(unsigned char key, int x, int y)
 		case '-':  
 			delta -= 5;
 			break; 
+		case 'r':
+			anim = RUN;
+			break;
+		case 'w':
+			anim = WALK;
+			break;
 		default:
 			printf ("La touche %d n´est pas active.\n", key);
 			break;
@@ -208,8 +214,15 @@ GLvoid window_timer()
 
 	// On déplace la position de l'avatar pour qu'il avance
 	// ********* A FAIRE **************
-
-	t += 0.004;
+	switch(anim)
+	{
+		case WALK:
+			t += 0.004;
+			break;
+		case RUN:
+			t+= 0.020;
+			break;
+	}
 	if(t > 1)
 	{
 		//anim = NOTHING;

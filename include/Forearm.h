@@ -16,6 +16,9 @@ typedef struct Forearm
 	Wrist* wrist;
 	float defAngleWalk;
 	float endAngleWalk;
+	float defAngleRun;
+	float endAngleRun;
+	uint8_t hasStartRun;
 	int list;
 }Forearm;
 

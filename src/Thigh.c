@@ -7,6 +7,22 @@ Thigh* Thigh_create(GLUquadricObj* qobj, Position pos)
 	self->pos=pos;
 	if (pos==LEFT)
 		defPos[0]=-1.25;
+		
+	self->defAngleWalk = 20.0;
+	self->endAngleWalk = -20.0;
+	if(pos == RIGHT)
+	{
+		self->defAngleWalk = -20.0;
+		self->endAngleWalk = 20.0;
+	}
+
+	self->defAngleRun = 40.0;
+	self->endAngleRun = -40.0;
+	if(pos == RIGHT)
+	{
+		self->defAngleRun = -40.0;
+		self->endAngleRun = 40.0;
+	}
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
@@ -25,6 +41,24 @@ Thigh* Thigh_create(GLUquadricObj* qobj, Position pos)
 
 void Thigh_onUpdate(Element* self)
 {
+	Thigh* sThigh= (Thigh*)self;
+	float defAngle=sThigh->defAngleWalk;
+	float endAngle=sThigh->endAngleWalk;
+	switch(anim)
+	{
+		case RUN:
+			defAngle = sThigh->defAngleRun;
+			endAngle = sThigh->endAngleRun;
+		case WALK:
+			if(t < 0.25)
+				glRotatef(4*t*(defAngle), 1.0, 0.0, 0.0);
+			else if(t < 0.75)
+				glRotatef(defAngle + 2*(t-0.25)*(endAngle - defAngle), 1.0, 0.0, 0.0);
+			else
+				glRotatef(endAngle + 4*(t-0.75)*(-endAngle), 1.0, 0.0, 0.0);
+			break;
+	}
+	
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glColor3f(1.0, 0.0, 0.0);
 	glCallList(((Thigh*)self)->list);

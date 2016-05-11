@@ -16,6 +16,8 @@ typedef struct Arm
 	Elbow* elbow;
 	float defAngleWalk;
 	float endAngleWalk;
+	float defAngleRun;
+	float endAngleRun;
 	int list;
 }Arm;
 

@@ -14,6 +14,10 @@ typedef struct Calf
 	Element base;
 	Position pos;
 	Ankle* ankle;
+	float defAngleWalk;
+	float endAngleWalk;
+	float defAngleRun;
+	float endAngleRun;
 	int list;
 	
 }Calf;

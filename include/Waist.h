@@ -15,6 +15,8 @@ typedef struct Waist
 	Element base;
 	Breast* breast;
 	Hip* hip;
+	float defposWalk;
+	float endposWalk;
 	int list;
 }Waist;
 

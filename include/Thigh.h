@@ -14,6 +14,10 @@ typedef struct Thigh
 	Element base;
 	Position pos;
 	Knee* knee;
+	float defAngleWalk;
+	float endAngleWalk;
+	float defAngleRun;
+	float endAngleRun;
 	int list;
 	
 }Thigh;

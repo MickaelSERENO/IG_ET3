@@ -14,6 +14,14 @@ Arm* Arm_create(GLUquadricObj* qobj, Position pos)
 		self->endAngleWalk = -30.0;
 	}
 	
+	self->defAngleRun = -45.0;
+	self->endAngleRun = 60.0;
+	if(pos == RIGHT)
+	{
+		self->defAngleRun = 60.0;
+		self->endAngleRun = -45.0;
+	}
+	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
 	elem->onUpdate = Arm_onUpdate;
@@ -31,15 +39,20 @@ Arm* Arm_create(GLUquadricObj* qobj, Position pos)
 void Arm_onUpdate(Element* self)
 {
 	Arm* sArm = (Arm*)self;
+	float defAngle=sArm->defAngleWalk;
+	float endAngle=sArm->endAngleWalk;
 	switch(anim)
 	{
+		case RUN:
+			defAngle = sArm->defAngleRun;
+			endAngle = sArm->endAngleRun;
 		case WALK:
 			if(t < 0.25)
-				glRotatef(4*t*(sArm->defAngleWalk), 1.0, 0.0, 0.0);
+				glRotatef(4*t*(defAngle), 1.0, 0.0, 0.0);
 			else if(t < 0.75)
-				glRotatef(sArm->defAngleWalk + 2*(t-0.25)*(sArm->endAngleWalk - sArm->defAngleWalk), 1.0, 0.0, 0.0);
+				glRotatef(defAngle + 2*(t-0.25)*(endAngle - defAngle), 1.0, 0.0, 0.0);
 			else
-				glRotatef(sArm->endAngleWalk + 4*(t-0.75)*(-sArm->endAngleWalk), 1.0, 0.0, 0.0);
+				glRotatef(endAngle + 4*(t-0.75)*(-endAngle), 1.0, 0.0, 0.0);
 			break;
 	}
 		

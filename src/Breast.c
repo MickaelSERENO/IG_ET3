@@ -5,6 +5,10 @@ Breast* Breast_create(GLUquadricObj* qobj)
 	Breast* self = (Breast*)malloc(sizeof(Breast));
 	float defPos[3] = {0.0, 0.0, 0.25};
 	Element_init((Element*)self, defPos);
+	
+	self->defAngleWalk = 15.0;
+	self->endAngleWalk = -15.0;
+	
 	Element* elem = (Element*)self;
 	elem->onUpdate = Breast_onUpdate;
 	
@@ -25,6 +29,19 @@ Breast* Breast_create(GLUquadricObj* qobj)
 
 void Breast_onUpdate(Element* elem)
 {
+	Breast* sBreast = (Breast*)elem;
+	switch(anim)
+	{
+		case WALK:
+			if(t < 0.25)
+				glRotatef(4*t*(sBreast->defAngleWalk), 0.0, 0.0, 1.0);
+			else if(t < 0.75)
+				glRotatef(sBreast->defAngleWalk + 2*(t-0.25)*(sBreast->endAngleWalk - sBreast->defAngleWalk), 0.0, 0.0, 1.0);
+			else
+				glRotatef(sBreast->endAngleWalk + 4*(t-0.75)*(-sBreast->endAngleWalk), 0.0, 0.0, 1.0);
+			break;
+	}
+	
 	glTranslatef(elem->defPos[0], elem->defPos[1], elem->defPos[2]);
 	glPushMatrix();
 	{
