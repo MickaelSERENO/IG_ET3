@@ -14,6 +14,10 @@ Forearm* Forearm_create(GLUquadricObj* qobj, Position pos)
 	glNewList(self->list, GL_COMPILE);
 		gluCylinder(qobj, 0.25, 0.5, 5.0, 16, 16);
 	glEndList();
+	
+	self->wrist = Wrist_create(qobj, pos);
+	Element_addChild(elem, (Element*)self->wrist);
+		
 	return self;
 }
 

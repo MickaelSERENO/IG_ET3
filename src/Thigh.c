@@ -16,6 +16,10 @@ Thigh* Thigh_create(GLUquadricObj* qobj, Position pos)
 	glNewList(self->list, GL_COMPILE);
 		gluCylinder(qobj, 0.75, 1.25, 5.0, 16, 16);
 	glEndList();
+	
+	self->knee = Knee_create(qobj, pos);
+	Element_addChild(elem, (Element*)self->knee);
+	
 	return self;
 }
 

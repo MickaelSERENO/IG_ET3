@@ -6,12 +6,14 @@
 #include <GL/glu.h>         
 #include <GL/glut.h>    
 #include "Element.h"
+#include "Wrist.h"
 #include <stdio.h>
 
 typedef struct Forearm
 {
 	Element base;
 	Position pos;
+	Wrist* wrist;
 	int list;
 }Forearm;
 

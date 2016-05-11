@@ -8,6 +8,7 @@
 #include "Element.h"
 #include "Shoulder.h"
 #include "Pelvis.h"
+#include "Neck.h"
 #include <stdio.h>
 
 typedef struct Body
@@ -16,6 +17,7 @@ typedef struct Body
 	Shoulder* leftShoulder;
 	Shoulder* rightShoulder;
 	Pelvis* pelvis;
+	Neck* neck;
 	int list;
 }Body;
 

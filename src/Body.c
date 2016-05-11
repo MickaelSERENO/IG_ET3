@@ -15,10 +15,12 @@ Body* Body_create(GLUquadricObj* qobj)
 	
 	self->leftShoulder = Shoulder_create(qobj, LEFT);
 	self->rightShoulder = Shoulder_create(qobj, RIGHT);
-	self->pelvis = Pelvis_create(qobj);
+	self->pelvis = Pelvis_create(qobj);	
+	self->neck = Neck_create(qobj);
 	Element_addChild(elem, (Element*)self->leftShoulder);
 	Element_addChild(elem, (Element*)self->rightShoulder);
 	Element_addChild(elem, (Element*)self->pelvis);
+	Element_addChild(elem, (Element*)self->neck);
 
 	return self;
 }

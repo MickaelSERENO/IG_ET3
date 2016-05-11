@@ -2,6 +2,7 @@
 #define  ELEMENT_INC
 
 #define PI 3.1415926535898
+#define BODY_SCALE 0.7
 
 #include <stdint.h>
 #include <GL/gl.h>           

@@ -1,11 +1,12 @@
 #include <GL/gl.h>           
 #include <GL/glu.h>         
 #include <GL/glut.h>    
-#include "Body.h"
+#include "Waist.h"
 
 #include <stdio.h>      
 #include <stdlib.h>     
 #include <math.h>
+#include "global.h"
 
 #define KEY_ESC 27
 #define position_Ini 60.0
@@ -20,7 +21,7 @@
 #define true  1
 #define false 0
 
-Body* body=NULL;
+Waist* waist=NULL;
 
 //On initialise le Material
 static GLfloat mat_specular[]          = { 1.0 , 1.0 , 1.0 , 1.0 };
@@ -38,6 +39,8 @@ static GLfloat diffuse_light1[]  = { 0.5 , 1.0 , 1.0 , 1.0 };
 static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 
 float t                 = 0.f;
+Anim anim               = NOTHING;
+
 float delta             = 10.f;
 float k                 = 0.001f;
 float K                 = 0.002f;
@@ -137,7 +140,7 @@ GLvoid initScene()
 	// les ombrages, s´il y en a, sont doux
 	gluQuadricNormals(qobj, GLU_SMOOTH);
 	
-	body = Body_create(qobj);
+	waist = Waist_create(qobj);
 }
 
 GLvoid window_display()
@@ -184,10 +187,10 @@ GLvoid window_key(unsigned char key, int x, int y)
 			}
 			break; 
 		case '+':  
-			delta *= 1.01;
+			delta += 5;
 			break; 
 		case '-':  
-			delta /= 1.01;
+			delta -= 5;
 			break; 
 		default:
 			printf ("La touche %d n´est pas active.\n", key);
@@ -223,8 +226,8 @@ void render_scene()
 	glRotatef(-160, 0, 0, 1);
 	
 	glRotatef(delta, 0, 0, 1);
-	if(body != NULL)
-		Element_update((Element*)body);
+	if(waist != NULL)
+		Element_update((Element*)waist);
 	//permutation des buffers lorsque le tracé est achevé
 	glutSwapBuffers();
 }

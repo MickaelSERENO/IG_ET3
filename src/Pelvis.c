@@ -66,22 +66,34 @@ Pelvis* Pelvis_create(GLUquadricObj* qobj)
 				else if(i < PELVIS_NB_EDGE/4 || i > 3*PELVIS_NB_EDGE/4)
 				{
 					pos3[0] = -0.25; 
-					pos3[1] = pos2[1]*1.0/PELVIS_RADIUS;
+					if(i == 3*PELVIS_NB_EDGE/4+1)
+						pos3[1] = 0.5;
+					else
+						pos3[1] = pos2[1]*1.0/PELVIS_RADIUS;
 					pos3[2] = -1.0;
 					
 					pos4[0] = -0.25; 
-					pos4[1] =  pos1[1]*1.0/PELVIS_RADIUS;
+					if(i == PELVIS_NB_EDGE/4-1)
+						pos4[1] = 0.5;
+					else
+						pos4[1] =  pos1[1]*1.0/PELVIS_RADIUS;
 					pos4[2] = -1.0;
 				}
 				
 				else
 				{
 					pos3[0] = 0.25; 
-					pos3[1] = pos2[1]*1.0/PELVIS_RADIUS;
+					if(i==PELVIS_NB_EDGE/4+1)
+						pos3[1]=-0.5;
+					else
+						pos3[1] = pos2[1]*1.0/PELVIS_RADIUS;
 					pos3[2] = -1.0;
 					
 					pos4[0] = 0.25; 
-					pos4[1] =  pos1[1]*1.0/PELVIS_RADIUS;
+					if(i==3*PELVIS_NB_EDGE/4-1)
+						pos4[1] = -0.5;
+					else
+						pos4[1] =  pos1[1]*1.0/PELVIS_RADIUS;
 					pos4[2] = -1.0;
 				}
 				
@@ -104,6 +116,11 @@ Pelvis* Pelvis_create(GLUquadricObj* qobj)
 void Pelvis_onUpdate(Element* self)
 {
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
-	glColor3f(1.0, 0.0, 0.0);
-	glCallList(((Pelvis*)self)->list);
+	glPushMatrix();
+	{
+		glScalef(1.0, BODY_SCALE, 1.0);
+		glColor3f(0.0, 0.0, 1.0);
+		glCallList(((Pelvis*)self)->list);
+	}
+	glPopMatrix();
 }

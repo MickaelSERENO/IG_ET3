@@ -5,9 +5,9 @@ Shoulder* Shoulder_create(GLUquadricObj* qobj, Position pos)
 	Shoulder* self = (Shoulder*)malloc(sizeof(Shoulder));
 	self->pos=pos;
 	
-	float defPos[3] = {3.0, 0.0, 6.5};
+	float defPos[3] = {2.7, 0.0, 3.0};
 	if(pos==LEFT)
-		defPos[0]=-3.0;
+		defPos[0]*=-1;
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
@@ -27,6 +27,6 @@ Shoulder* Shoulder_create(GLUquadricObj* qobj, Position pos)
 void Shoulder_onUpdate(Element* self)
 {
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
-	glColor3f(1.0, 1.0, 0.0);
+	glColor3f(1.0, 0.0, 0.0);
 	glCallList(((Shoulder*)self)->list);
 }
