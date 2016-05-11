@@ -3,7 +3,7 @@
 Arm* Arm_create(GLUquadricObj* qobj, Position pos)
 {
 	Arm* self = (Arm*)malloc(sizeof(Arm));
-	float defPos[3] = {0.0, 0.0, -4.25};
+	float defPos[3] = {0.0, 0.0, -4.5};
 	self->pos=pos;
 	
 	self->defAngleWalk = -30.0;
@@ -20,7 +20,7 @@ Arm* Arm_create(GLUquadricObj* qobj, Position pos)
 	
 	self->list = glGenLists(1);
 	glNewList(self->list, GL_COMPILE);
-		gluCylinder(qobj, 0.5, 0.5, 4.25, 16, 16);
+		gluCylinder(qobj, 0.5, 0.5, 4.5, 16, 16);
 	glEndList();
 	
 	self->elbow = Elbow_create(qobj, pos);

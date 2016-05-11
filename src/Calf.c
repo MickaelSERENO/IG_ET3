@@ -3,7 +3,7 @@
 Calf* Calf_create(GLUquadricObj* qobj, Position pos)
 {
 	Calf* self = (Calf*)malloc(sizeof(Calf));
-	float defPos[3] = {0.0, 0.0, -5.0};
+	float defPos[3] = {0.0, 0.0, -5.15};
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;

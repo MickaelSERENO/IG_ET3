@@ -3,7 +3,7 @@
 Elbow* Elbow_create(GLUquadricObj* qobj, Position pos)
 {
 	Elbow* self = (Elbow*)malloc(sizeof(Elbow));
-	float defPos[3] = {0.0, 0.0, 0.0};
+	float defPos[3] = {0.0, 0.0, -0.25};
 	self->pos=pos;
 	
 	Element_init((Element*)self, defPos);

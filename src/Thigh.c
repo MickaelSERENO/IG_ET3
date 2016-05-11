@@ -3,7 +3,7 @@
 Thigh* Thigh_create(GLUquadricObj* qobj, Position pos)
 {
 	Thigh* self = (Thigh*)malloc(sizeof(Thigh));
-	float defPos[3] = {1.25, 0.0, -5.0};
+	float defPos[3] = {1.25, 0.0, -4.75};
 	self->pos=pos;
 	if (pos==LEFT)
 		defPos[0]=-1.25;
@@ -14,7 +14,7 @@ Thigh* Thigh_create(GLUquadricObj* qobj, Position pos)
 	
 	self->list = glGenLists(1);
 	glNewList(self->list, GL_COMPILE);
-		gluCylinder(qobj, 0.75, 1.25, 5.0, 16, 16);
+		gluCylinder(qobj, 0.75, 1.25, 4.75, 16, 16);
 	glEndList();
 	
 	self->knee = Knee_create(qobj, pos);

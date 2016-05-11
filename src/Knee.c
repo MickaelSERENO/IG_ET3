@@ -3,7 +3,7 @@
 Knee* Knee_create(GLUquadricObj* qobj, Position pos)
 {
 	Knee* self = (Knee*)malloc(sizeof(Knee));
-	float defPos[3] = {0.0, 0.0, 0.0};
+	float defPos[3] = {0.0, 0.0, -0.25};
 	self->pos=pos;
 	
 	Element_init((Element*)self, defPos);
