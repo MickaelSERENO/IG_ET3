@@ -3,8 +3,16 @@
 Forearm* Forearm_create(GLUquadricObj* qobj, Position pos)
 {
 	Forearm* self = (Forearm*)malloc(sizeof(Forearm));
-	float defPos[3] = {0.0, 0.0, -4.5};
+	float defPos[3] = {0.0, 0.0, -4.75};
 	self->pos=pos;
+	
+	self->defAngleWalk = 0.0;
+	self->endAngleWalk = 15.0;
+	if(pos == RIGHT)
+	{
+		self->defAngleWalk = 15.0;
+		self->endAngleWalk = 0.0;
+	}
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
@@ -23,6 +31,19 @@ Forearm* Forearm_create(GLUquadricObj* qobj, Position pos)
 
 void Forearm_onUpdate(Element* self)
 {
+	Forearm* sForearm = (Forearm*)self;
+	switch(anim)
+	{
+		case WALK:
+			if(t < 0.25)
+				glRotatef(4*t*(sForearm->defAngleWalk), 1.0, 0.0, 0.0);
+			else if(t < 0.75)
+				glRotatef(sForearm->defAngleWalk + 2*(t-0.25)*(sForearm->endAngleWalk - sForearm->defAngleWalk), 1.0, 0.0, 0.0);
+			else
+				glRotatef(sForearm->endAngleWalk + 4*(t-0.75)*(-sForearm->endAngleWalk), 1.0, 0.0, 0.0);
+			break;
+	}
+	
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glColor3f(1.0, 0.0, 0.0);
 	glCallList(((Forearm*)self)->list);

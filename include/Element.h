@@ -8,6 +8,7 @@
 #include <GL/gl.h>           
 #include <GL/glu.h>         
 #include <GL/glut.h>    
+#include "global.h"
 
 typedef enum Position
 {

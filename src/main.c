@@ -39,7 +39,7 @@ static GLfloat diffuse_light1[]  = { 0.5 , 1.0 , 1.0 , 1.0 };
 static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 
 float t                 = 0.f;
-Anim anim               = NOTHING;
+Anim anim               = WALK;
 
 float delta             = 10.f;
 float k                 = 0.001f;
@@ -209,6 +209,12 @@ GLvoid window_timer()
 	// On déplace la position de l'avatar pour qu'il avance
 	// ********* A FAIRE **************
 
+	t += 0.004;
+	if(t > 1)
+	{
+		//anim = NOTHING;
+		t=0;
+	}
 	glutTimerFunc(latence,&window_timer,++Step);
 
 	glutPostRedisplay();

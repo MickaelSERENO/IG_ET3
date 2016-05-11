@@ -14,6 +14,8 @@ typedef struct Forearm
 	Element base;
 	Position pos;
 	Wrist* wrist;
+	float defAngleWalk;
+	float endAngleWalk;
 	int list;
 }Forearm;
 

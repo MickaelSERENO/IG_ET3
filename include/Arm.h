@@ -14,6 +14,8 @@ typedef struct Arm
 	Element base;
 	Position pos;
 	Elbow* elbow;
+	float defAngleWalk;
+	float endAngleWalk;
 	int list;
 }Arm;
 
