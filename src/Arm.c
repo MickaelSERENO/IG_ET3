@@ -14,12 +14,12 @@ Arm* Arm_create(GLUquadricObj* qobj, Position pos)
 		self->endAngleWalk = -30.0;
 	}
 	
-	self->defAngleRun = -45.0;
+	self->defAngleRun = -60.0;
 	self->endAngleRun = 60.0;
 	if(pos == RIGHT)
 	{
 		self->defAngleRun = 60.0;
-		self->endAngleRun = -45.0;
+		self->endAngleRun = -60.0;
 	}
 	
 	Element_init((Element*)self, defPos);

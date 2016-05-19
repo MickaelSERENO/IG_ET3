@@ -2,6 +2,7 @@
 #include <GL/glu.h>         
 #include <GL/glut.h>    
 #include "Waist.h"
+#include "Chair.h"
 
 #include <stdio.h>      
 #include <stdlib.h>     
@@ -22,6 +23,7 @@
 #define false 0
 
 Waist* waist=NULL;
+Chair* chair=NULL;
 
 //On initialise le Material
 static GLfloat mat_specular[]          = { 1.0 , 1.0 , 1.0 , 1.0 };
@@ -41,6 +43,7 @@ static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 float t                 = 0.f;
 Anim anim               = WALK;
 
+float alpha             = 0.f;
 float delta             = 10.f;
 float k                 = 0.001f;
 float K                 = 0.002f;
@@ -141,6 +144,7 @@ GLvoid initScene()
 	gluQuadricNormals(qobj, GLU_SMOOTH);
 	
 	waist = Waist_create(qobj);
+	chair = Chair_create(qobj);
 }
 
 GLvoid window_display()
@@ -192,6 +196,12 @@ GLvoid window_key(unsigned char key, int x, int y)
 		case '-':  
 			delta -= 5;
 			break; 
+		case '8':
+			alpha += 5;
+			break;
+		case '2':
+			alpha -= 5;
+			break;
 		case 'r':
 			anim = RUN;
 			break;
@@ -245,8 +255,11 @@ void render_scene()
 	glRotatef(-160, 0, 0, 1);
 	
 	glRotatef(delta, 0, 0, 1);
+	glRotatef(alpha,1,0,0);
 	if(waist != NULL)
 		Element_update((Element*)waist);
+	if(chair != NULL)
+		Element_update((Element*)chair);
 	//permutation des buffers lorsque le tracé est achevé
 	glutSwapBuffers();
 }
