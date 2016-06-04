@@ -1,24 +1,21 @@
-#ifndef WRIST_INC
-#define WRIST_INC
+#ifndef FINGER4_INC
+#define FINGER4_INC
 
 #include <stdint.h>
 #include <GL/gl.h>           
 #include <GL/glu.h>         
 #include <GL/glut.h>    
 #include "Element.h"
-#include "Hand.h"
 #include <stdio.h>
 
-typedef struct Wrist
+typedef struct Finger4
 {
 	Element base;
 	Position pos;
-	Hand* hand;
 	int list;
-}Wrist;
+}Finger4;
 
-Wrist* Wrist_create(GLUquadricObj* qobj, Position pos);
-void Wrist_onUpdate(Element* self);
+Finger4* Finger4_create(GLUquadricObj* qobj, Position pos);
+void Finger4_onUpdate(Element* self);
 
 #endif
-

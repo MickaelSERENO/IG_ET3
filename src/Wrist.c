@@ -14,6 +14,9 @@ Wrist* Wrist_create(GLUquadricObj* qobj, Position pos)
 	glNewList(self->list, GL_COMPILE);
 		glutSolidSphere(0.25, 16, 16);
 	glEndList();
+
+	self->hand = Hand_create(qobj, pos);
+	Element_addChild(elem, (Element*)self->hand);
 	
 	return self;
 }

@@ -15,8 +15,9 @@ Pelvis* Pelvis_create(GLUquadricObj* qobj)
 	
 		//Créer le cercle
 		glBegin(GL_TRIANGLE_FAN);
+			uint32_t i;
 			glVertex3f(0.0, 0.0, 0.0);
-			for(uint32_t i=0; i < PELVIS_NB_EDGE+1; i++)
+			for(i=0; i < PELVIS_NB_EDGE+1; i++)
 			{
 				float pos[] = {PELVIS_RADIUS*(float)cos(i*2*PI/PELVIS_NB_EDGE), PELVIS_RADIUS*(float)sin(i*2*PI/PELVIS_NB_EDGE), 0.0f};
 				glVertex3f(pos[0], pos[1], pos[2]);
@@ -33,7 +34,7 @@ Pelvis* Pelvis_create(GLUquadricObj* qobj)
 		
 		//Les relier. Le rectangle créera un défaut au niveau de ses coins (car ce n'est pas un cercle)
 		glBegin(GL_QUADS);
-			for(uint32_t i=0; i < PELVIS_NB_EDGE+1; i++)
+			for(i=0; i < PELVIS_NB_EDGE+1; i++)
 			{
 				float pos1[] = {PELVIS_RADIUS*(float)cos(i*2*PI/PELVIS_NB_EDGE), PELVIS_RADIUS*(float)sin(i*2*PI/PELVIS_NB_EDGE), 0.0f};
 				float pos2[] = {PELVIS_RADIUS*(float)cos((i+1)*2*PI/PELVIS_NB_EDGE), PELVIS_RADIUS*(float)sin((i+1)*2*PI/PELVIS_NB_EDGE), 0.0f};
