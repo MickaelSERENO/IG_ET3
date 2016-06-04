@@ -31,6 +31,7 @@ void Waist_onUpdate(Element* elem)
 	switch(anim)
 	{
 		case WALK:
+		case SIT_GO:
 		case RUN:
 			if(t < 0.25)
 				glTranslatef(0.0, 0.0, 4*t*(sWait->endposWalk));
@@ -40,6 +41,10 @@ void Waist_onUpdate(Element* elem)
 				glTranslatef(0.0, 0.0, 4*(t-0.5)*(sWait->endposWalk));
 			else
 				glTranslatef(0.0, 0.0, sWait->endposWalk + 4*(t-0.75)*(sWait->defposWalk - sWait->endposWalk));
+			break;
+
+		case SIT_DOWN:
+				glTranslatef(0.0, -4.0*t, -4.5*sin(3.14/2*t));
 			break;
 	}
 	

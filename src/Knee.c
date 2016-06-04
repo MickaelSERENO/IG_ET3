@@ -23,6 +23,12 @@ Knee* Knee_create(GLUquadricObj* qobj, Position pos)
 
 void Knee_onUpdate(Element* self)
 {
+	switch(anim)
+	{
+		case SIT_DOWN:
+			glRotatef(-90 * t, 1, 0, 0);
+			break;
+	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glColor3f(1.0, 0.0, 0.0);
 	glCallList(((Knee*)self)->list);

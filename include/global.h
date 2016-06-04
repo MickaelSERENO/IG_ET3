@@ -3,7 +3,7 @@
 
 typedef enum Anim
 {
-	NOTHING, WAIT, SIT, WALK, RUN
+	NOTHING, WAIT, SIT_DOWN, SIT_GO, SIT_TURN_GO, SIT_TURN_DOWN, WALK, RUN
 }Anim;
 
 extern float t;

@@ -47,6 +47,7 @@ void Arm_onUpdate(Element* self)
 			defAngle = sArm->defAngleRun;
 			endAngle = sArm->endAngleRun;
 		case WALK:
+		case SIT_GO:
 			if(t < 0.25)
 				glRotatef(4*t*(defAngle), 1.0, 0.0, 0.0);
 			else if(t < 0.75)

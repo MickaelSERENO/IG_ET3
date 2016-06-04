@@ -3,7 +3,7 @@
 Chair* Chair_create(GLUquadricObj* qobj)
 {
 	Chair* self = (Chair*)malloc(sizeof(Chair));
-	float defPos[3] = {-7.0, 0.0, 0.0};
+	float defPos[3] = {-7.0, 0.0, -6.0};
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
@@ -79,10 +79,10 @@ Chair* Chair_create(GLUquadricObj* qobj)
 
 void Chair_onUpdate(Element* self)
 {
-	glTranslatef(0.0,0.0,-6.0);
+	glTranslatef(0, 0, self->defPos[2]);
 	glPushMatrix();
 	{	
-		glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
+		glTranslatef(self->defPos[0], self->defPos[1], 0.0f);
 		glScalef(2.5, 2.5, 0.2);
 		glColor3f(1.0, 1.0, 0.0);
 		glCallList(((Chair*)self)->cube);

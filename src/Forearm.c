@@ -63,6 +63,7 @@ void Forearm_onUpdate(Element* self)
 			break;
 			
 		case WALK:
+		case SIT_GO:
 			if(t < 0.25)
 				glRotatef(4*t*(sForearm->defAngleWalk), 1.0, 0.0, 0.0);
 			else if(t < 0.75)

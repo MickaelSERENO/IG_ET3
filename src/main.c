@@ -51,6 +51,11 @@ int IdleRunning         = true;
 int TraceEcran          = false;
 int RangFichierStockage = 0;
 float position          = position_Ini;
+float charPos[2];
+float vGo[2];
+float charAngle         = -0.0f;
+float counterAngle      = 0.0f;
+float angleTurnGo       = 0.0f;
 
 int Step                = 0;
 int latence             = 4;
@@ -129,12 +134,11 @@ GLvoid initGL()
 	glClearColor(RED, GREEN, BLUE, ALPHA);        
 	// z-buffer
 	glEnable(GL_DEPTH_TEST);
-	
-	
 }
 
 GLvoid initScene()
 {
+	charPos[0] = charPos[1] = 0.0f;
 	GLUquadricObj* GLAPIENTRY qobj;
 	// allocation d´une description de quadrique
 	qobj = gluNewQuadric();
@@ -176,6 +180,7 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
 
 GLvoid window_key(unsigned char key, int x, int y) 
 {  
+	float v[2];
 	switch (key) {    
 		case KEY_ESC:  
 			exit(1);                    
@@ -208,6 +213,13 @@ GLvoid window_key(unsigned char key, int x, int y)
 		case 'w':
 			anim = WALK;
 			break;
+		case 'a':
+			v[0] = -7.5 - charPos[0];
+			v[1] = 4.0 - charPos[1];
+
+			angleTurnGo = -charAngle - atan2(v[0], v[1])*180/3.14;
+			anim        = SIT_TURN_GO;
+			break;
 		default:
 			printf ("La touche %d n´est pas active.\n", key);
 			break;
@@ -227,17 +239,20 @@ GLvoid window_timer()
 	switch(anim)
 	{
 		case WALK:
+		case SIT_GO:
 			t += 0.004;
 			break;
 		case RUN:
-			t+= 0.020;
+			t += 0.020;
+			break;
+		case SIT_DOWN:
+			t += 0.015;
 			break;
 	}
+
 	if(t > 1)
-	{
-		//anim = NOTHING;
 		t=0;
-	}
+
 	glutTimerFunc(latence,&window_timer,++Step);
 
 	glutPostRedisplay();
@@ -256,8 +271,79 @@ void render_scene()
 	
 	glRotatef(delta, 0, 0, 1);
 	glRotatef(alpha,1,0,0);
-	if(waist != NULL)
-		Element_update((Element*)waist);
+
+	//Calculer la direction du joueur
+	glPushMatrix();
+	{
+		float v[2];
+		float oldCharAngle;
+		switch(anim)
+		{
+			case SIT_TURN_GO:
+				if(angleTurnGo < 0)
+				{
+					counterAngle -= 2.5;
+					charAngle    -= 2.5;
+				}
+
+				else
+				{
+					counterAngle += 2.5;
+					charAngle    += 2.5;
+				}
+
+				if(angleTurnGo > 0 && counterAngle >= angleTurnGo || angleTurnGo < 0 && counterAngle <= angleTurnGo)
+				{
+					v[0] = -7 - charPos[0];
+					v[1] = 4.0 - charPos[1];
+					vGo[0] = v[0];
+					vGo[1] = v[1];
+					charAngle = -atan2(v[0], v[1])*180/3.14;
+
+					counterAngle = 0;
+					anim = SIT_GO;
+				}
+				break;
+
+			case SIT_GO:
+				v[0] = -7 - charPos[0];
+				v[1] = 4.0 - charPos[1];
+
+				if(v[0] * vGo[0] < 0 || v[1] * vGo[1] < 0 || v[0] == v[1] && v[1] == 0.0)
+					anim = SIT_TURN_DOWN;
+
+				float vGoModule = sqrt(vGo[0] * vGo[0] + vGo[1] * vGo[1]);
+				v[0] = vGo[0] / vGoModule;
+				v[1] = vGo[1] / vGoModule;
+
+				charPos[0] += 0.05 * v[0];
+				charPos[1] += 0.05 * v[1];
+				break;
+
+			case SIT_TURN_DOWN:
+				oldCharAngle = charAngle;
+				if(charAngle < 0 && charAngle > 180)
+					charAngle += -2.5;
+				else
+					charAngle -= 2.5;
+
+				if(oldCharAngle * charAngle <= 0)
+				{
+					anim = SIT_DOWN;
+				}
+				break;
+		}
+		if(charAngle > 360)
+			charAngle -= 360;
+		else if(charAngle < -360)
+			charAngle += 360;
+
+		glTranslatef(charPos[0], charPos[1], 0.0);
+		glRotatef(charAngle, 0, 0, 1);
+		if(waist != NULL)
+			Element_update((Element*)waist);
+	}
+	glPopMatrix();
 	if(chair != NULL)
 		Element_update((Element*)chair);
 	//permutation des buffers lorsque le tracé est achevé

@@ -8,6 +8,7 @@
 #include "Element.h"
 #include "Breast.h"
 #include "Hip.h"
+#include <math.h>
 #include <stdio.h>
 
 typedef struct Waist

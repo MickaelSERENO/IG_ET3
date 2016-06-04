@@ -47,12 +47,16 @@ void Calf_onUpdate(Element* self)
 			defAngle = sCalf->defAngleRun;
 			endAngle = sCalf->endAngleRun;
 		case WALK:
+		case SIT_GO:
 			if(t < 0.25)
 				glRotatef(4*t*(defAngle), 1.0, 0.0, 0.0);
 			else if(t < 0.75)
 				glRotatef(defAngle + 2*(t-0.25)*(endAngle - defAngle), 1.0, 0.0, 0.0);
 			else
 				glRotatef(endAngle + 4*(t-0.75)*(-endAngle), 1.0, 0.0, 0.0);
+			break;
+		case SIT_DOWN:
+//			glRotatef(-90 * t, 1, 0, 0);
 			break;
 	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);

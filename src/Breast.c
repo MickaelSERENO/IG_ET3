@@ -33,6 +33,7 @@ void Breast_onUpdate(Element* elem)
 	switch(anim)
 	{
 		case WALK:
+		case SIT_GO:
 			if(t < 0.25)
 				glRotatef(4*t*(sBreast->defAngleWalk), 0.0, 0.0, 1.0);
 			else if(t < 0.75)
