@@ -279,8 +279,11 @@ GLvoid window_timer()
 			else if(currentKey == GLUT_KEY_RIGHT)
 				a = -charAngle;
 
-			while(a > 180)
+			a = a % 360;
+			if(a > 180)
 				a -= 360;
+			else if(a < -180)
+				a += 360;
 
 			if(a < -3)
 				charAngle -= 3;
