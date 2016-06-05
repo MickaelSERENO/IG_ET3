@@ -42,6 +42,7 @@ static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 
 float t                 = 0.f;
 Anim anim               = NOTHING;
+uint8_t wantRun = 0;
 
 float alpha             = 0.f;
 float delta             = 10.f;
@@ -70,6 +71,7 @@ GLvoid window_display();
 GLvoid window_reshape(GLsizei width, GLsizei height); 
 GLvoid window_key(int key, int x, int y); 
 GLvoid window_upSpecial(int key, int x, int y); 
+GLvoid window_upKey(int key, int x, int y);
 GLvoid window_special(int key, int x, int y); 
 GLvoid window_timer(); 
 
@@ -99,6 +101,7 @@ int main(int argc, char **argv)
 	glutIgnoreKeyRepeat(1); 
 	glutKeyboardFunc(&window_key);
 	glutSpecialUpFunc(&window_upSpecial);
+	glutKeyboardUpFunc(&window_upKey);
 	glutSpecialFunc(&window_special);
 	// fonction appelée régulièrement entre deux gestions d´événements
 	glutTimerFunc(latence,&window_timer,Step);
@@ -227,17 +230,38 @@ GLvoid window_key(int key, int x, int y)
 			angleTurnGo = -charAngle - atan2(v[0], v[1])*180/3.14;
 			anim        = SIT_TURN_GO;
 			break;
+		case 'x':
+			if(anim == WALK)
+				anim = RUN;
+			wantRun = 1;
+			break;
+
 		default:
 			printf ("La touche %d n´est pas active.\n", key);
 			break;
 	}     
 }
 
+GLvoid window_upKey(int key, int x, int y)
+{
+	if(key == 'x')
+	{
+		wantRun = 0;
+		if(anim == RUN)
+		{
+			anim = WALK;
+			t = 0;
+		}
+	}
+}
+
 GLvoid window_upSpecial(int key,int x, int y)
 {
 	if(key == currentKey)
 	{
-		anim = NOTHING;
+		currentKey = 0;
+		if(anim == WALK || anim == RUN)
+			anim = NOTHING;
 		t=0;
 	}
 }	
@@ -251,7 +275,10 @@ GLvoid window_special(int key, int x, int y)
 		case GLUT_KEY_LEFT:
 		case GLUT_KEY_DOWN:
 			currentKey = key;
-			anim = WALK;
+			if(wantRun)
+				anim = RUN;
+			else
+				anim = WALK;
 			break;
 	}
 }
@@ -268,31 +295,33 @@ GLvoid window_timer()
 	// ********* A FAIRE **************
 	int a = 0;
 	float direction[2];
+
+	//Determine the new angle when walking with arrows
+	if(currentKey == GLUT_KEY_UP)
+		a = 180 - charAngle;
+	else if(currentKey == GLUT_KEY_DOWN)
+		a = - charAngle;
+	else if(currentKey == GLUT_KEY_LEFT)
+		a = -90 - charAngle;
+	else if(currentKey == GLUT_KEY_RIGHT)
+		a = 90-charAngle;
+
+	a = a % 360;
+	if(a > 180)
+		a -= 360;
+	else if(a < -180)
+		a += 360;
+
+	if(a < -3)
+		charAngle -= 3;
+	else if(a > 3)
+		charAngle += 3;
+	else
+		charAngle += a;
+
 	switch(anim)
 	{
 		case WALK:
-			if(currentKey == GLUT_KEY_UP)
-				a = 180 - charAngle;
-			else if(currentKey == GLUT_KEY_DOWN)
-				a = - charAngle;
-			else if(currentKey == GLUT_KEY_LEFT)
-				a = -90 - charAngle;
-			else if(currentKey == GLUT_KEY_RIGHT)
-				a = 90-charAngle;
-
-			a = a % 360;
-			if(a > 180)
-				a -= 360;
-			else if(a < -180)
-				a += 360;
-
-			if(a < -3)
-				charAngle -= 3;
-			else if(a > 3)
-				charAngle += 3;
-			else
-				charAngle += a;
-
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
