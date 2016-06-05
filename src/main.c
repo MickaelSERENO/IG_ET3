@@ -267,17 +267,18 @@ GLvoid window_timer()
 	// On déplace la position de l'avatar pour qu'il avance
 	// ********* A FAIRE **************
 	int a = 0;
+	float direction[2];
 	switch(anim)
 	{
 		case WALK:
 			if(currentKey == GLUT_KEY_UP)
-				a = 90 - charAngle;
-			else if(currentKey == GLUT_KEY_DOWN)
-				a = -90 - charAngle;
-			else if(currentKey == GLUT_KEY_LEFT)
 				a = 180 - charAngle;
+			else if(currentKey == GLUT_KEY_DOWN)
+				a = - charAngle;
+			else if(currentKey == GLUT_KEY_LEFT)
+				a = -90 - charAngle;
 			else if(currentKey == GLUT_KEY_RIGHT)
-				a = -charAngle;
+				a = 90-charAngle;
 
 			a = a % 360;
 			if(a > 180)
@@ -292,9 +293,8 @@ GLvoid window_timer()
 			else
 				charAngle += a;
 
-			float direction[2];
-			direction[0] = -cos(charAngle*3.14/180);
-			direction[1] = sin(charAngle*3.14/180);
+			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
+			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
 			charPos[0] += direction[0]/4;
 			charPos[1] += direction[1]/4;
@@ -302,6 +302,12 @@ GLvoid window_timer()
 			t += 0.004;
 			break;
 		case RUN:
+			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
+			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
+
+			charPos[0] += direction[0]/2;
+			charPos[1] += direction[1]/2;
+
 			t += 0.020;
 			break;
 		case SIT_DOWN:
