@@ -296,8 +296,8 @@ GLvoid window_timer()
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
-			charPos[0] += direction[0]/4;
-			charPos[1] += direction[1]/4;
+			charPos[0] += direction[0]/8;
+			charPos[1] += direction[1]/8;
 		case SIT_GO:
 			t += 0.004;
 			break;
@@ -305,8 +305,8 @@ GLvoid window_timer()
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
-			charPos[0] += direction[0]/2;
-			charPos[1] += direction[1]/2;
+			charPos[0] += direction[0]/4;
+			charPos[1] += direction[1]/4;
 
 			t += 0.020;
 			break;
@@ -327,6 +327,11 @@ GLvoid window_timer()
 
 void render_scene()
 {
+	if(charAngle > 360)
+		charAngle -= 360;
+	else if(charAngle < -360)
+		charAngle += 360;
+
 	glLoadIdentity();
 	// rotation de 90 degres autour de Ox pour mettre l'axe Oz 
 	// vertical comme sur la figure
@@ -338,6 +343,7 @@ void render_scene()
 	
 	glRotatef(delta, 0, 0, 1);
 	glRotatef(alpha,1,0,0);
+	glTranslatef(-charPos[0], -charPos[1], 0.0);
 
 	//Calculer la direction du joueur
 	glPushMatrix();
@@ -388,22 +394,29 @@ void render_scene()
 				break;
 
 			case SIT_TURN_DOWN:
-				oldCharAngle = charAngle;
-				if(charAngle < 0 && charAngle > 180)
-					charAngle += -2.5;
-				else
-					charAngle -= 2.5;
-
-				if(oldCharAngle * charAngle <= 0)
+				if(charAngle > 180)
 				{
-					anim = SIT_DOWN;
+					if(charAngle < 360-2.5)
+						charAngle += 2.5;
+					else
+					{
+						anim = SIT_DOWN;
+						charAngle = 0;
+					}
 				}
+				else
+				{
+					if(charAngle > 2.5)
+						charAngle -= 2.5;
+					else
+					{
+						anim = SIT_DOWN;
+						charAngle = 0;
+					}
+				}
+
 				break;
 		}
-		if(charAngle > 360)
-			charAngle -= 360;
-		else if(charAngle < -360)
-			charAngle += 360;
 
 		glTranslatef(charPos[0], charPos[1], 0.0);
 		glRotatef(charAngle, 0, 0, 1);

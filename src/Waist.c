@@ -44,7 +44,7 @@ void Waist_onUpdate(Element* elem)
 			break;
 
 		case SIT_DOWN:
-				glTranslatef(0.0, -4.0*t, -4.5*sin(3.14/2*t));
+				glTranslatef(0.0, -4.0*t, -4.6*sin(3.14/2*t));
 			break;
 	}
 	
