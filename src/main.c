@@ -41,7 +41,7 @@ static GLfloat diffuse_light1[]  = { 0.5 , 1.0 , 1.0 , 1.0 };
 static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 
 float t                 = 0.f;
-Anim anim               = WALK;
+Anim anim               = NOTHING;
 
 float alpha             = 0.f;
 float delta             = 10.f;
@@ -60,13 +60,17 @@ float angleTurnGo       = 0.0f;
 int Step                = 0;
 int latence             = 4;
 
+int currentKey          = 0;
+
 void init_scene();
 void render_scene();
 GLvoid initGL();
 GLvoid initScene();
 GLvoid window_display();
 GLvoid window_reshape(GLsizei width, GLsizei height); 
-GLvoid window_key(unsigned char key, int x, int y); 
+GLvoid window_key(int key, int x, int y); 
+GLvoid window_upSpecial(int key, int x, int y); 
+GLvoid window_special(int key, int x, int y); 
 GLvoid window_timer(); 
 
 int main(int argc, char **argv) 
@@ -92,7 +96,10 @@ int main(int argc, char **argv)
 	// le redimensionnement de la fenêtre
 	glutReshapeFunc(&window_reshape);
 	// la gestion des événements clavier
+	glutIgnoreKeyRepeat(1); 
 	glutKeyboardFunc(&window_key);
+	glutSpecialUpFunc(&window_upSpecial);
+	glutSpecialFunc(&window_special);
 	// fonction appelée régulièrement entre deux gestions d´événements
 	glutTimerFunc(latence,&window_timer,Step);
 
@@ -178,7 +185,7 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
 
 // fonction de call-back pour la gestion des événements clavier
 
-GLvoid window_key(unsigned char key, int x, int y) 
+GLvoid window_key(int key, int x, int y) 
 {  
 	float v[2];
 	switch (key) {    
@@ -226,6 +233,29 @@ GLvoid window_key(unsigned char key, int x, int y)
 	}     
 }
 
+GLvoid window_upSpecial(int key,int x, int y)
+{
+	if(key == currentKey)
+	{
+		anim = NOTHING;
+		t=0;
+	}
+}	
+
+GLvoid window_special(int key, int x, int y)
+{
+	switch(key)
+	{
+		case GLUT_KEY_UP:
+		case GLUT_KEY_RIGHT:
+		case GLUT_KEY_LEFT:
+		case GLUT_KEY_DOWN:
+			currentKey = key;
+			anim = WALK;
+			break;
+	}
+}
+
 // fonction de call-back appelée régulièrement
 
 GLvoid window_timer() 
@@ -236,9 +266,35 @@ GLvoid window_timer()
 
 	// On déplace la position de l'avatar pour qu'il avance
 	// ********* A FAIRE **************
+	int a = 0;
 	switch(anim)
 	{
 		case WALK:
+			if(currentKey == GLUT_KEY_UP)
+				a = 90 - charAngle;
+			else if(currentKey == GLUT_KEY_DOWN)
+				a = -90 - charAngle;
+			else if(currentKey == GLUT_KEY_LEFT)
+				a = 180 - charAngle;
+			else if(currentKey == GLUT_KEY_RIGHT)
+				a = -charAngle;
+
+			while(a > 180)
+				a -= 360;
+
+			if(a < -3)
+				charAngle -= 3;
+			else if(a > 3)
+				charAngle += 3;
+			else
+				charAngle += a;
+
+			float direction[2];
+			direction[0] = -cos(charAngle*3.14/180);
+			direction[1] = sin(charAngle*3.14/180);
+
+			charPos[0] += direction[0]/4;
+			charPos[1] += direction[1]/4;
 		case SIT_GO:
 			t += 0.004;
 			break;
@@ -247,6 +303,8 @@ GLvoid window_timer()
 			break;
 		case SIT_DOWN:
 			t += 0.015;
+			if(t > 1)
+				t = 1;
 			break;
 	}
 
