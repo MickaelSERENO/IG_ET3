@@ -22,6 +22,13 @@ Elbow* Elbow_create(GLUquadricObj* qobj, Position pos)
 
 void Elbow_onUpdate(Element* self)
 {
+	if(anim == WAIT)
+	{
+		if(((Elbow*)self)->pos == RIGHT)
+			glRotatef(80, 0, 1, 0);
+		else
+			glRotatef(-80, 0, 1, 0);
+	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glColor3f(1.0, 153.0/255.0, 51.0/255.0);
 	glCallList(((Elbow*)self)->list);

@@ -58,6 +58,8 @@ void Calf_onUpdate(Element* self)
 		case SIT_DOWN:
 //			glRotatef(-90 * t, 1, 0, 0);
 			break;
+//		case WAIT:
+//			glRotatef(-7.5, 1, 0, 0);
 	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glColor3f(0.0, 51.0/255.0, 102.0/255.0);
