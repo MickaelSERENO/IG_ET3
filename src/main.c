@@ -65,6 +65,9 @@ int latence             = 4;
 int currentKey          = 0;
 int waitingTime         = 0;
 
+Mode mode               = MANU;
+int timeMode            = 0;
+
 void init_scene();
 void render_scene();
 GLvoid initGL();
@@ -192,6 +195,8 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
 
 GLvoid window_key(int key, int x, int y) 
 {  
+	if(anim == SIT_DOWN)
+		charPos[1] += 0.5;
 	float v[2];
 	switch (key) {    
 		case KEY_ESC:  
@@ -227,9 +232,10 @@ GLvoid window_key(int key, int x, int y)
 			break;
 		case 'a':
 			v[0] = -7.5 - charPos[0];
-			v[1] = 4.0 - charPos[1];
+			v[1] = 4.1 - charPos[1];
 
 			angleTurnGo = -charAngle - atan2(v[0], v[1])*180/3.14;
+			counterAngle = 0;
 			anim        = SIT_TURN_GO;
 			break;
 		case 'x':
@@ -238,10 +244,28 @@ GLvoid window_key(int key, int x, int y)
 			wantRun = 1;
 			break;
 
+		case 'm':
+			if(mode == MANU)
+				mode = AUTO;
+			else
+				mode = MANU;
+			timeMode = 0;
+			break;
+
 		default:
 			printf ("La touche %d n´est pas active.\n", key);
 			break;
 	}     
+
+	switch(key)
+	{
+		case 'a':
+		case 'r':
+		case 'w':
+		case 'x':
+			mode = MANU;
+			break;
+	}
 }
 
 GLvoid window_upKey(int key, int x, int y)
@@ -270,6 +294,8 @@ GLvoid window_upSpecial(int key,int x, int y)
 
 GLvoid window_special(int key, int x, int y)
 {
+	if(anim == SIT_DOWN)
+		charPos[1] += 1.5;
 	switch(key)
 	{
 		case GLUT_KEY_UP:
@@ -281,6 +307,7 @@ GLvoid window_special(int key, int x, int y)
 				anim = RUN;
 			else
 				anim = WALK;
+			mode = MANU;
 			break;
 	}
 }
@@ -289,24 +316,29 @@ GLvoid window_special(int key, int x, int y)
 
 GLvoid window_timer() 
 {
-	// On effecture une variation des angles de chaque membre
-	// de l'amplitude associée et de la position médiane
-	// ********* A FAIRE **************
-
-	// On déplace la position de l'avatar pour qu'il avance
-	// ********* A FAIRE **************
-	int a = 0;
 	float direction[2];
-
-	//Determine the new angle when walking with arrows
-	if(currentKey == GLUT_KEY_UP)
-		a = 180 - charAngle;
-	else if(currentKey == GLUT_KEY_DOWN)
-		a = - charAngle;
-	else if(currentKey == GLUT_KEY_LEFT)
-		a = -90 - charAngle;
-	else if(currentKey == GLUT_KEY_RIGHT)
-		a = 90-charAngle;
+	int a = 0;
+	if(mode == MANU)
+	{
+		//Determine the new angle when walking with arrows
+		if(currentKey == GLUT_KEY_UP)
+			a = 180 - charAngle;
+		else if(currentKey == GLUT_KEY_DOWN)
+			a = - charAngle;
+		else if(currentKey == GLUT_KEY_LEFT)
+			a = -90 - charAngle;
+		else if(currentKey == GLUT_KEY_RIGHT)
+			a = 90-charAngle;
+	}
+	else
+	{
+		if(timeMode >= 0 && timeMode < 300)
+			a = -charAngle;
+		else if(timeMode >= 300 && timeMode < 500)
+			a = 90-charAngle;
+		else if(timeMode >= 500 && timeMode < 900)
+			a = 180-charAngle;
+	}
 
 	a = a % 360;
 	if(a > 180)
@@ -320,6 +352,33 @@ GLvoid window_timer()
 		charAngle += 3;
 	else
 		charAngle += a;
+
+	if(mode==AUTO)
+	{
+		if(timeMode == 0)
+			anim = WALK;
+
+		else if(timeMode == 300)
+			anim = RUN;
+
+		else if(timeMode == 500)
+			anim = WALK;
+
+		else if(timeMode == 900)
+		{
+			float v[2];
+			v[0] = -7.5 - charPos[0];
+			v[1] = 4.1 - charPos[1];
+
+			angleTurnGo = -charAngle - atan2(v[0], v[1])*180/3.14;
+			counterAngle = 0;
+			anim        = SIT_TURN_GO;
+		}
+
+		if(timeMode < 901)
+			timeMode+=10;
+		printf("timeMode %d \n", timeMode);
+	}
 
 	int hasMove = 0;
 
@@ -355,6 +414,7 @@ GLvoid window_timer()
 			break;
 		case WAIT:
 			t+= 0.04;
+			break;
 	}
 
 	if(anim != WAIT && anim != NOTHING)
@@ -369,7 +429,7 @@ GLvoid window_timer()
 	//Test collisions
 	if(hasMove)
 	{
-		if(!(CHAIR_POSX + CHAIR_SIZEX < charPos[0] - PELVIS_RADIUS || CHAIR_POSX > charPos[0] + PELVIS_RADIUS ||
+		if(!(CHAIR_POSX + CHAIR_SIZEX < charPos[0] - PELVIS_RADIUS+0.5 || CHAIR_POSX > charPos[0] + PELVIS_RADIUS+0.5 ||
 			 CHAIR_POSY + CHAIR_SIZEY < charPos[1] - PELVIS_RADIUS || CHAIR_POSY > charPos[1] + PELVIS_RADIUS))
 		{
 			if(anim == WALK)
@@ -433,7 +493,7 @@ void render_scene()
 				if(angleTurnGo > 0 && counterAngle >= angleTurnGo || angleTurnGo < 0 && counterAngle <= angleTurnGo)
 				{
 					v[0] = -7 - charPos[0];
-					v[1] = 4.0 - charPos[1];
+					v[1] = 4.1 - charPos[1];
 					vGo[0] = v[0];
 					vGo[1] = v[1];
 					charAngle = -atan2(v[0], v[1])*180/3.14;
@@ -445,7 +505,7 @@ void render_scene()
 
 			case SIT_GO:
 				v[0] = -7 - charPos[0];
-				v[1] = 4.0 - charPos[1];
+				v[1] = 4.1 - charPos[1];
 
 				if(v[0] * vGo[0] < 0 || v[1] * vGo[1] < 0 || v[0] == v[1] && v[1] == 0.0)
 					anim = SIT_TURN_DOWN;
