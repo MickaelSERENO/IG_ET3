@@ -32,12 +32,12 @@ static GLfloat mat_ambientanddiffuse[] = { 0.4, 0.4 , 0.0 , 1.0 };
 static GLfloat mat_shininess[]         = { 20.0};
 
 //On initialise la lumière (la lumière restera fixe)
-static GLfloat light_position0[] = { 15.0 , 15.0 , 15.0 , 0.0 };
-static GLfloat light_position1[] = { 15.0 , 15.0 , -15.0 , 0.0 };
+static GLfloat light_position0[] = { 30.0 , 30.0 , 30.0 , 0.0 };
+static GLfloat light_position1[] = { 30.0 , 30.0 , -30.0 , 0.0 };
 static GLfloat ambient_light0[]  = { 0.0 , 0.0 , 0.0 , 0.0 };
 static GLfloat diffuse_light0[]  = { 0.7 , 0.7 , 0.7 , 1.0 };
 static GLfloat specular_light0[] = { 0.1 , 0.1 , 0.1 , 0.1 };
-static GLfloat ambient_light1[]  = { 0.50 , 0.50 , 0.50 , 1.0 };
+static GLfloat ambient_light1[]  = { 0.25 , 0.25 , 0.25 , 1.0 };
 static GLfloat diffuse_light1[]  = { 0.5 , 1.0 , 1.0 , 1.0 };
 static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 

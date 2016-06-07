@@ -71,7 +71,7 @@ Chair* Chair_create(GLUquadricObj* qobj)
 	
 	self->cylinder = glGenLists(1);
 	glNewList(self->cylinder, GL_COMPILE);
-		gluCylinder(qobj, 0.25, 0.25, 5.0, 16, 16);
+		gluCylinder(qobj, 0.25, 0.25, 4.7, 16, 16);
 	glEndList();
 
 	return self;
@@ -79,12 +79,12 @@ Chair* Chair_create(GLUquadricObj* qobj)
 
 void Chair_onUpdate(Element* self)
 {
+	glColor3f(130.0/255.0, 82.0/255.0, 1.0/255.0);
 	glTranslatef(0, 0, self->defPos[2]);
 	glPushMatrix();
 	{	
 		glTranslatef(self->defPos[0], self->defPos[1], 0.0f);
 		glScalef(2.5, 2.5, 0.2);
-		glColor3f(1.0, 1.0, 0.0);
 		glCallList(((Chair*)self)->cube);
 	}
 	glPopMatrix();
@@ -94,24 +94,19 @@ void Chair_onUpdate(Element* self)
 	{
 		glTranslatef(self->defPos[0], -2.3, 2.7);
 		glScalef(2.5, 0.2, 2.5);
-		glColor3f(1.0, 1.0, 0.0);
 		glCallList(((Chair*)self)->cube);
 	}
 	glPopMatrix();
 	
-	glTranslatef(-4.75, -2.25, -5.2);
-	glColor3f(1.0, 1.0, 0.0);
+	glTranslatef(-4.75, -2.25, -4.9);
 	glCallList(((Chair*)self)->cylinder);
 	
 	glTranslatef(0.0, 4.5, 0.0);
-	glColor3f(1.0, 1.0, 0.0);
 	glCallList(((Chair*)self)->cylinder);
 	
 	glTranslatef(-4.5, 0.0, 0.0);
-	glColor3f(1.0, 1.0, 0.0);
 	glCallList(((Chair*)self)->cylinder);
 	
 	glTranslatef(0.0, -4.5, 0.0);
-	glColor3f(1.0, 1.0, 0.0);
 	glCallList(((Chair*)self)->cylinder);
 }

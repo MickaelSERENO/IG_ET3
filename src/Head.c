@@ -13,6 +13,9 @@ Head* Head_create(GLUquadricObj* qobj)
 	glNewList(self->list, GL_COMPILE);
 		glutSolidSphere(1.5, 16, 16);
 	glEndList();
+
+	self->face = Face_create(qobj);
+	Element_addChild(elem, (Element*)self->face);
 		
 	return self;
 }

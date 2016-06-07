@@ -6,11 +6,13 @@
 #include <GL/glu.h>         
 #include <GL/glut.h>    
 #include "Element.h"
+#include "Face.h"
 #include <stdio.h>
 
 typedef struct Head
 {
 	Element base;
+	Face* face;
 	int list;
 }Head;
 
