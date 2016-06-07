@@ -3,7 +3,7 @@
 Chair* Chair_create(GLUquadricObj* qobj)
 {
 	Chair* self = (Chair*)malloc(sizeof(Chair));
-	float defPos[3] = {-7.0, 0.0, -6.0};
+	float defPos[3] = {CHAIR_POSX + CHAIR_SIZEX/2.0f, CHAIR_POSY + CHAIR_SIZEY/2.0f, -6.0};
 	
 	Element_init((Element*)self, defPos);
 	Element* elem = (Element*)self;
