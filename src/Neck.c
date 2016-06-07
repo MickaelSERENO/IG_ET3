@@ -23,7 +23,7 @@ Neck* Neck_create(GLUquadricObj* qobj)
 void Neck_onUpdate(Element* self)
 {
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 153.0/255.0, 51.0/255.0);
 	glCallList(((Neck*)self)->list);
 }
 

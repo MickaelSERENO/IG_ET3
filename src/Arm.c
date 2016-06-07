@@ -58,6 +58,6 @@ void Arm_onUpdate(Element* self)
 	}
 		
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glCallList(((Arm*)self)->list);
 }

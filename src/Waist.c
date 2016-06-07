@@ -52,7 +52,7 @@ void Waist_onUpdate(Element* elem)
 	glPushMatrix();
 	{
 		glScalef(1.3,BODY_SCALE+0.3,1.0);
-		glColor3f(0.0, 0.0, 1.0);
+		glColor3f(1.0, 1.0, 1.0);
 		glCallList(((Waist*)elem)->list);
 	}
 	glPopMatrix();

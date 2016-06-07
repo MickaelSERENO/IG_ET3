@@ -120,7 +120,7 @@ void Pelvis_onUpdate(Element* self)
 	glPushMatrix();
 	{
 		glScalef(1.0, BODY_SCALE, 1.0);
-		glColor3f(0.0, 0.0, 1.0);
+		glColor3f(0.0, 51.0/255.0, 102.0/255.0);
 		glCallList(((Pelvis*)self)->list);
 	}
 	glPopMatrix();

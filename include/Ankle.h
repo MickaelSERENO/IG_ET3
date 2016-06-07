@@ -6,11 +6,13 @@
 #include <GL/glu.h>         
 #include <GL/glut.h>    
 #include "Element.h"
+#include "Foot.h"
 #include <stdio.h>
 
 typedef struct Ankle
 {
 	Element base;
+	Foot* foot;
 	Position pos;
 	int list;
 }Ankle;

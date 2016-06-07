@@ -30,6 +30,6 @@ void Knee_onUpdate(Element* self)
 			break;
 	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.0, 51.0/255.0, 102.0/255.0);
 	glCallList(((Knee*)self)->list);
 }

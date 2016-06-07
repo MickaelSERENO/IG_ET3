@@ -23,7 +23,7 @@ void Head_onUpdate(Element* self)
 	glPushMatrix();
 	{
 		glScalef(2.5/3.0,2.5/3.0,1);
-		glColor3f(1.0, 0.0, 0.0);
+		glColor3f(1.0, 153.0/255.0, 51.0/255.0);
 		glCallList(((Head*)self)->list);
 	}
 	glPopMatrix();
