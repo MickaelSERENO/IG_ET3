@@ -3,6 +3,7 @@
 #include <GL/glut.h>    
 #include "Waist.h"
 #include "Chair.h"
+#include "Pelvis.h"
 
 #include <stdio.h>      
 #include <stdlib.h>     
@@ -319,9 +320,12 @@ GLvoid window_timer()
 	else
 		charAngle += a;
 
+	int hasMove = 0;
+
 	switch(anim)
 	{
 		case WALK:
+			hasMove = 1;
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
@@ -331,6 +335,7 @@ GLvoid window_timer()
 			t += 0.004;
 			break;
 		case RUN:
+			hasMove = 1;
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
 
@@ -348,6 +353,29 @@ GLvoid window_timer()
 
 	if(t > 1)
 		t=0;
+
+	//Test collisions
+	if(hasMove)
+	{
+//		printf("charPos[0] - 5.90 / 2.0f = %f \n charPos[0] + PELVIS_RADIUS = %f \n charPos[1] - PELVIS_RADIUS = %f \n charPos[1] + PELVIS_RADIUS = %f \n\n", charPos[0] - PELVIS_RADIUS, charPos[0] + PELVIS_RADIUS, charPos[1] - PELVIS_RADIUS, charPos[1] + PELVIS_RADIUS);
+//		if(!(charPos[0] - PELVIS_RADIUS < CHAIR_POSX || charPos[0] + PELVIS_RADIUS > CHAIR_POSX + CHAIR_SIZEX ||
+//		   charPos[1] - PELVIS_RADIUS < CHAIR_POSY || charPos[1] + PELVIS_RADIUS > CHAIR_POSY + CHAIR_SIZEY))
+		printf("charPos[0] %f charPos[1] %f \n", charPos[0], charPos[1]);
+		if(!(CHAIR_POSX + CHAIR_SIZEX < charPos[0] - PELVIS_RADIUS || CHAIR_POSX > charPos[0] + PELVIS_RADIUS ||
+			 CHAIR_POSY + CHAIR_SIZEY < charPos[1] - PELVIS_RADIUS || CHAIR_POSY > charPos[1] + PELVIS_RADIUS))
+		{
+			if(anim == WALK)
+			{
+				charPos[0] -= direction[0]/8;
+				charPos[1] -= direction[1]/8;
+			}
+			else if(anim == RUN)
+			{
+				charPos[0] -= direction[0]/4;
+				charPos[1] -= direction[1]/4;
+			}
+		}
+	}
 
 	glutTimerFunc(latence,&window_timer,++Step);
 

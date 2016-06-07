@@ -8,6 +8,11 @@
 #include "Element.h"
 #include <stdio.h>
 
+#define CHAIR_POSX -9.5
+#define CHAIR_POSY -2.5
+#define CHAIR_SIZEX 5
+#define CHAIR_SIZEY 5
+
 typedef struct Chair
 {
 	Element base;
