@@ -16,6 +16,9 @@ Head* Head_create(GLUquadricObj* qobj)
 
 	self->face = Face_create(qobj);
 	Element_addChild(elem, (Element*)self->face);
+
+	self->hair = Hair_create(qobj);
+	Element_addChild(elem, (Element*)self->hair);
 		
 	return self;
 }
