@@ -7,12 +7,14 @@
 #include <GL/glut.h>    
 #include "Element.h"
 #include "Face.h"
+#include "Hair.h"
 #include <stdio.h>
 
 typedef struct Head
 {
 	Element base;
 	Face* face;
+	Hair* hair;
 	int list;
 }Head;
 
