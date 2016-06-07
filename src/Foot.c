@@ -20,6 +20,18 @@ Foot* Foot_create(GLUquadricObj* qobj, Position pos)
 
 void Foot_onUpdate(Element* self)
 {
+	switch(anim)
+	{
+		case WAIT:
+			if(((Foot*)self)->pos == RIGHT)
+			{
+				if(t < 0.5)
+					glRotatef(45*2*t, 1, 0, 0);
+				else
+					glRotatef(45*2*(1-t), 1, 0, 0);
+				break;
+			}
+	}
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
 	glPushMatrix();
 	{

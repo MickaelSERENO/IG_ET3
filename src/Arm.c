@@ -55,6 +55,13 @@ void Arm_onUpdate(Element* self)
 			else
 				glRotatef(endAngle + 4*(t-0.75)*(-endAngle), 1.0, 0.0, 0.0);
 			break;
+
+		case WAIT:
+			if(((Arm*)self)->pos == RIGHT)
+				glRotatef(-40, 0, 1, 0);
+			else
+				glRotatef(40, 0, 1, 0);
+			break;
 	}
 		
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);

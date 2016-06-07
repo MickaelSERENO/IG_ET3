@@ -63,6 +63,7 @@ int Step                = 0;
 int latence             = 4;
 
 int currentKey          = 0;
+int waitingTime         = 0;
 
 void init_scene();
 void render_scene();
@@ -349,7 +350,18 @@ GLvoid window_timer()
 			if(t > 1)
 				t = 1;
 			break;
+		case NOTHING:
+			waitingTime++;
+			break;
+		case WAIT:
+			t+= 0.04;
 	}
+
+	if(anim != WAIT && anim != NOTHING)
+		waitingTime = 0;
+
+	if(anim == NOTHING && waitingTime > 100)
+		anim = WAIT;
 
 	if(t > 1)
 		t=0;
@@ -357,10 +369,6 @@ GLvoid window_timer()
 	//Test collisions
 	if(hasMove)
 	{
-//		printf("charPos[0] - 5.90 / 2.0f = %f \n charPos[0] + PELVIS_RADIUS = %f \n charPos[1] - PELVIS_RADIUS = %f \n charPos[1] + PELVIS_RADIUS = %f \n\n", charPos[0] - PELVIS_RADIUS, charPos[0] + PELVIS_RADIUS, charPos[1] - PELVIS_RADIUS, charPos[1] + PELVIS_RADIUS);
-//		if(!(charPos[0] - PELVIS_RADIUS < CHAIR_POSX || charPos[0] + PELVIS_RADIUS > CHAIR_POSX + CHAIR_SIZEX ||
-//		   charPos[1] - PELVIS_RADIUS < CHAIR_POSY || charPos[1] + PELVIS_RADIUS > CHAIR_POSY + CHAIR_SIZEY))
-		printf("charPos[0] %f charPos[1] %f \n", charPos[0], charPos[1]);
 		if(!(CHAIR_POSX + CHAIR_SIZEX < charPos[0] - PELVIS_RADIUS || CHAIR_POSX > charPos[0] + PELVIS_RADIUS ||
 			 CHAIR_POSY + CHAIR_SIZEY < charPos[1] - PELVIS_RADIUS || CHAIR_POSY > charPos[1] + PELVIS_RADIUS))
 		{

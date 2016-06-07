@@ -46,6 +46,9 @@ void Waist_onUpdate(Element* elem)
 		case SIT_DOWN:
 				glTranslatef(0.0, -4.0*t, -4.6*sin(3.14/2*t));
 			break;
+		case WAIT:
+			glRotatef(-4.5, 1, 0, 0);
+			break;
 	}
 	
 	glTranslatef(elem->defPos[0], elem->defPos[1], elem->defPos[2]);

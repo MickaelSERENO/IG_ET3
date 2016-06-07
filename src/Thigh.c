@@ -61,6 +61,9 @@ void Thigh_onUpdate(Element* self)
 		case SIT_DOWN:
 			glRotatef(90 * t, 1, 0, 0);
 			break;
+		case WAIT:
+			if(((Thigh*)self)->pos == RIGHT)
+				glRotatef(15, 1, 0, 0);
 	}
 	
 	glTranslatef(self->defPos[0], self->defPos[1], self->defPos[2]);
