@@ -9,6 +9,7 @@ Chair* Chair_create(GLUquadricObj* qobj)
 	Element* elem = (Element*)self;
 	elem->onUpdate = Chair_onUpdate;
 	
+	//création du cube
 	self->cube = glGenLists(1);
 	glNewList(self->cube, GL_COMPILE);
 		glBegin(GL_TRIANGLES);
@@ -69,6 +70,7 @@ Chair* Chair_create(GLUquadricObj* qobj)
 		glEnd();
 	glEndList();
 	
+	//Creation des pieds
 	self->cylinder = glGenLists(1);
 	glNewList(self->cylinder, GL_COMPILE);
 		gluCylinder(qobj, 0.25, 0.25, 4.7, 16, 16);
@@ -79,6 +81,7 @@ Chair* Chair_create(GLUquadricObj* qobj)
 
 void Chair_onUpdate(Element* self)
 {
+	//Plan horizontal de la chaise (où on s'assoie)
 	glColor3f(130.0/255.0, 82.0/255.0, 1.0/255.0);
 	glTranslatef(0, 0, self->defPos[2]);
 	glPushMatrix();
@@ -89,7 +92,7 @@ void Chair_onUpdate(Element* self)
 	}
 	glPopMatrix();
 	
-	
+	//Dossier
 	glPushMatrix();
 	{
 		glTranslatef(self->defPos[0], -2.3, 2.7);
@@ -98,6 +101,7 @@ void Chair_onUpdate(Element* self)
 	}
 	glPopMatrix();
 	
+	//Pieds
 	glTranslatef(-4.75, -2.25, -4.9);
 	glCallList(((Chair*)self)->cylinder);
 	

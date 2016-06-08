@@ -41,9 +41,10 @@ static GLfloat ambient_light1[]  = { 0.25 , 0.25 , 0.25 , 1.0 };
 static GLfloat diffuse_light1[]  = { 0.5 , 1.0 , 1.0 , 1.0 };
 static GLfloat specular_light1[] = { 0.5 , 1.0 , 1.0 , 1.0 };
 
-float t                 = 0.f;
-Anim anim               = NOTHING;
-uint8_t wantRun = 0;
+//Données d'animation
+float t                 = 0.f; //paramètre de l'animation
+Anim anim               = NOTHING; //Animation courante
+uint8_t wantRun = 0; //Premier pas de la course
 
 float alpha             = 0.f;
 float delta             = 10.f;
@@ -53,11 +54,15 @@ int IdleRunning         = true;
 int TraceEcran          = false;
 int RangFichierStockage = 0;
 float position          = position_Ini;
+
+//Position du personnage
 float charPos[2];
+//Ou le personnage souhaite aller
 float vGo[2];
+//Angle du personnage par rapport à l'axe x
 float charAngle         = -0.0f;
-float counterAngle      = 0.0f;
-float angleTurnGo       = 0.0f;
+float counterAngle      = 0.0f; //Comptage d'une rotation du personnage (pour animation)
+float angleTurnGo       = 0.0f; //La direction final du personnage
 
 int Step                = 0;
 int latence             = 4;
@@ -65,6 +70,7 @@ int latence             = 4;
 int currentKey          = 0;
 int waitingTime         = 0;
 
+//Mode
 Mode mode               = MANU;
 int timeMode            = 0;
 
@@ -212,6 +218,7 @@ GLvoid window_key(int key, int x, int y)
 				IdleRunning = true;
 			}
 			break; 
+		//Rotation de la caméra
 		case '+':  
 			delta += 5;
 			break; 
@@ -224,6 +231,7 @@ GLvoid window_key(int key, int x, int y)
 		case '2':
 			alpha -= 5;
 			break;
+		//Gestion animation
 		case 'r':
 			anim = RUN;
 			break;
@@ -231,6 +239,7 @@ GLvoid window_key(int key, int x, int y)
 			anim = WALK;
 			break;
 		case 'a':
+			//Calcul de la direction à prendre
 			v[0] = -7.5 - charPos[0];
 			v[1] = 4.1 - charPos[1];
 
@@ -298,6 +307,7 @@ GLvoid window_special(int key, int x, int y)
 		charPos[1] += 1.5;
 	switch(key)
 	{
+		//Touch pour bouger le personnage
 		case GLUT_KEY_UP:
 		case GLUT_KEY_RIGHT:
 		case GLUT_KEY_LEFT:
@@ -332,26 +342,34 @@ GLvoid window_timer()
 	}
 	else
 	{
+		//Angle pour les directions en mode automatique
 		if(timeMode >= 0 && timeMode < 300)
 			a = -charAngle;
-		else if(timeMode >= 300 && timeMode < 500)
+		else if(timeMode >= 300 && timeMode < 400)
 			a = 90-charAngle;
-		else if(timeMode >= 500 && timeMode < 900)
+		else if(timeMode >= 400 && timeMode < 900)
 			a = 180-charAngle;
+		else
+			a = 0;
 	}
 
-	a = a % 360;
-	if(a > 180)
-		a -= 360;
-	else if(a < -180)
-		a += 360;
+	if(a != 0)
+	{
+		//Mettre l'angle entre -pi et +pi
+		a = a % 360;
+		if(a > 180)
+			a -= 360;
+		else if(a < -180)
+			a += 360;
 
-	if(a < -3)
-		charAngle -= 3;
-	else if(a > 3)
-		charAngle += 3;
-	else
-		charAngle += a;
+		//Tourner le personnage
+		if(a < -3)
+			charAngle -= 3;
+		else if(a > 3)
+			charAngle += 3;
+		else
+			charAngle += a;
+	}
 
 	if(mode==AUTO)
 	{
@@ -361,11 +379,12 @@ GLvoid window_timer()
 		else if(timeMode == 300)
 			anim = RUN;
 
-		else if(timeMode == 500)
+		else if(timeMode == 400)
 			anim = WALK;
 
 		else if(timeMode == 900)
 		{
+			//Calcul de la direction à prendre pour aller vers la chaise
 			float v[2];
 			v[0] = -7.5 - charPos[0];
 			v[1] = 4.1 - charPos[1];
@@ -376,8 +395,7 @@ GLvoid window_timer()
 		}
 
 		if(timeMode < 901)
-			timeMode+=10;
-		printf("timeMode %d \n", timeMode);
+			timeMode+=1;
 	}
 
 	int hasMove = 0;
@@ -385,6 +403,7 @@ GLvoid window_timer()
 	switch(anim)
 	{
 		case WALK:
+			//Marcher en face du personnage
 			hasMove = 1;
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
@@ -395,6 +414,7 @@ GLvoid window_timer()
 			t += 0.004;
 			break;
 		case RUN:
+			//Courir en face du personnage
 			hasMove = 1;
 			direction[0] = cos(charAngle*3.14/180 + 3.14/2);
 			direction[1] = sin(charAngle*3.14/180 + 3.14/2);
@@ -432,6 +452,7 @@ GLvoid window_timer()
 		if(!(CHAIR_POSX + CHAIR_SIZEX < charPos[0] - PELVIS_RADIUS+0.5 || CHAIR_POSX > charPos[0] + PELVIS_RADIUS+0.5 ||
 			 CHAIR_POSY + CHAIR_SIZEY < charPos[1] - PELVIS_RADIUS || CHAIR_POSY > charPos[1] + PELVIS_RADIUS))
 		{
+			//Annulé le déplacement
 			if(anim == WALK)
 			{
 				charPos[0] -= direction[0]/8;
@@ -478,6 +499,7 @@ void render_scene()
 		switch(anim)
 		{
 			case SIT_TURN_GO:
+				//Tourner correctement (au plus court)
 				if(angleTurnGo < 0)
 				{
 					counterAngle -= 2.5;
@@ -490,6 +512,7 @@ void render_scene()
 					charAngle    += 2.5;
 				}
 
+				//Voir si on a tourner plus que ce qui était nécessaire
 				if(angleTurnGo > 0 && counterAngle >= angleTurnGo || angleTurnGo < 0 && counterAngle <= angleTurnGo)
 				{
 					v[0] = -7 - charPos[0];
@@ -507,9 +530,11 @@ void render_scene()
 				v[0] = -7 - charPos[0];
 				v[1] = 4.1 - charPos[1];
 
+				//Déplacement terminer
 				if(v[0] * vGo[0] < 0 || v[1] * vGo[1] < 0 || v[0] == v[1] && v[1] == 0.0)
 					anim = SIT_TURN_DOWN;
 
+				//Allez vers la chaise de manière constante (quelque soit la direction du personnage)
 				float vGoModule = sqrt(vGo[0] * vGo[0] + vGo[1] * vGo[1]);
 				v[0] = vGo[0] / vGoModule;
 				v[1] = vGo[1] / vGoModule;
@@ -519,6 +544,7 @@ void render_scene()
 				break;
 
 			case SIT_TURN_DOWN:
+				//Faire attention aux angles
 				if(charAngle > 180)
 				{
 					if(charAngle < 360-2.5)
@@ -540,6 +566,10 @@ void render_scene()
 					}
 				}
 
+				break;
+			case SIT_DOWN:
+				charPos[0] = -7;
+				charPos[1] = 4.1;
 				break;
 		}
 
